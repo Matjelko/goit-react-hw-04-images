@@ -1,10 +1,10 @@
-// import { Loading } from 'notiflix/build/notiflix-loading-aio';
+import { Loading } from 'notiflix/build/notiflix-loading-aio';
 import Searchbar from "components/Searchbar/Searchbar";
 import ImageGallery from "components/ImageGallery/ImageGallery";
 import Modal from "components/Modal/Modal";
 import Button from "components/Button/Button";
-import { useState } from 'react';
-// import { useState, useEffect } from 'react';
+// import { useState } from 'react';
+import { useState, useEffect } from 'react';
 // import PropTypes from 'prop-types';
 
 const KEY = '33302890-ea105e46da5a591cb4b446b85'
@@ -15,10 +15,16 @@ const App = ({ modalAlt }) => {
   const [ pages, setPages ] = useState(0)
   const [ isModalShown, setIsModalShown] = useState(false)
   const [ modalImageSource, setModalImageSource ] = useState('')
+  const [ isLoading, setIsLoading ] = useState(false);
 
-  // useEffect(() => {
-  //   Loading.remove();
-  // }, [])
+  useEffect(() => {
+    if(isLoading){
+      Loading.standard({ svgColor: '#3f51b5' })
+    }
+    else{
+      Loading.remove();
+    }
+  }, [isLoading])
 
   const fetchImages = async url => {
     const images = await fetch(url);
@@ -28,7 +34,7 @@ const App = ({ modalAlt }) => {
 
   const handleSubmit = async event => {
     event.preventDefault();
-    // Loading.standard({ svgColor: '#3f51b5' })
+    setIsLoading(true);
 
     const page = 1;
     const input = event.target[1]['value'];
@@ -39,10 +45,11 @@ const App = ({ modalAlt }) => {
     setImages(images)
     setSearchText(input)
     setPages(page)
+    setIsLoading(false)
   }
 
   const handleLoadMore = async () => {
-    // Loading.standard({ svgColor: '#3f51b5' });
+    setIsLoading(true)
     const prevImages = images;
     const page = pages + 1;
     const input = searchText;
@@ -52,6 +59,7 @@ const App = ({ modalAlt }) => {
 
     setImages([...prevImages, ...newImages]);
     setImages(page);
+    setIsLoading(false)
   }
 
   const handleImageClick = event => {
