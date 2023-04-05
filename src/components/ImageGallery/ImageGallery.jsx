@@ -18,7 +18,6 @@ const ImageGallery = ({ images, handleImageClick }) => {
 
 ImageGallery.propTypes = {
     images: PropTypes.array,
-    pages: PropTypes.number,
     handleImageClick: PropTypes.func
 }
 

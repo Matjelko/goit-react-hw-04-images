@@ -3,9 +3,8 @@ import Searchbar from "components/Searchbar/Searchbar";
 import ImageGallery from "components/ImageGallery/ImageGallery";
 import Modal from "components/Modal/Modal";
 import Button from "components/Button/Button";
-// import { useState } from 'react';
+import PropTypes from 'prop-types'
 import { useState, useEffect } from 'react';
-// import PropTypes from 'prop-types';
 
 const KEY = '33302890-ea105e46da5a591cb4b446b85'
 
@@ -27,8 +26,8 @@ const App = ({ modalAlt }) => {
   }, [isLoading])
 
   const fetchImages = async url => {
-    const images = await fetch(url);
-    const imagesJson = await images.json();
+    const fetchedImages = await fetch(url);
+    const imagesJson = await fetchedImages.json();
     return imagesJson.hits;
   }
 
@@ -40,9 +39,9 @@ const App = ({ modalAlt }) => {
     const input = event.target[1]['value'];
     const URL = `https://pixabay.com/api/?q=${input}&page=${page}&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`
     
-    const images = await fetchImages(URL);
+    const fetchedImages = await fetchImages(URL);
 
-    setImages(images)
+    setImages([...fetchedImages])
     setSearchText(input)
     setPages(page)
     setIsLoading(false)
@@ -58,7 +57,7 @@ const App = ({ modalAlt }) => {
     const newImages = await fetchImages(URL);
 
     setImages([...prevImages, ...newImages]);
-    setImages(page);
+    setPages(page);
     setIsLoading(false)
   }
 
@@ -85,7 +84,7 @@ const App = ({ modalAlt }) => {
     }
   }
 
-  const isGalleryItemsShown = images['length'] === 0 ? false : true;
+  const isGalleryItemsShown = images.length === 0 ? false : true;
 
   return(
     <>
@@ -127,16 +126,14 @@ const App = ({ modalAlt }) => {
   )
 }
 
-// App.propTypes = {
-//   images: PropTypes.array,
-//   searchText: PropTypes.string,
-//   pages: PropTypes.number,
-//   isLoading: PropTypes.bool,
-//   isModalShown: PropTypes.bool,
-//   modalImageSource: PropTypes.string,
-//   modalAlt: PropTypes.string,
-//   fetchImages: PropTypes.func,
-//   handleImageClick: PropTypes.func
-// }
+App.propTypes = {
+  modalAlt: PropTypes.string,
+  fetchImages: PropTypes.func,
+  handleImageClick: PropTypes.func,
+  handleSubmit: PropTypes.func,
+  handleLoadMore: PropTypes.func,
+  handleEsc: PropTypes.func,
+  handleOverlayClick: PropTypes.func
+}
 
 export default App;
