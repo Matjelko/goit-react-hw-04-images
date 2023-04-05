@@ -7,7 +7,7 @@ const Modal = ({ handleOverlayClick, handleEsc, src, alt }) => {
         const overlay = document.querySelector('.overlay');
 
         overlay.addEventListener('click', handleOverlayClick)
-    }, [])
+    }, [handleOverlayClick, handleEsc])
 
     return(
         <div className="overlay">
